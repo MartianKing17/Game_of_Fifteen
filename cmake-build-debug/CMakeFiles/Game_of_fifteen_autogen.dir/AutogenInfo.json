@@ -1,0 +1,86 @@
+{
+	"BUILD_DIR" : "/home/mokovalevskyi/Projects/Game of fifteen/Game_of_fifteen/cmake-build-debug/Game_of_fifteen_autogen",
+	"CMAKE_BINARY_DIR" : "/home/mokovalevskyi/Projects/Game of fifteen/Game_of_fifteen/cmake-build-debug",
+	"CMAKE_CURRENT_BINARY_DIR" : "/home/mokovalevskyi/Projects/Game of fifteen/Game_of_fifteen/cmake-build-debug",
+	"CMAKE_CURRENT_SOURCE_DIR" : "/home/mokovalevskyi/Projects/Game of fifteen/Game_of_fifteen",
+	"CMAKE_EXECUTABLE" : "/snap/clion/123/bin/cmake/linux/bin/cmake",
+	"CMAKE_SOURCE_DIR" : "/home/mokovalevskyi/Projects/Game of fifteen/Game_of_fifteen",
+	"DEP_FILE" : "",
+	"DEP_FILE_RULE_NAME" : "",
+	"HEADERS" : [],
+	"HEADER_EXTENSIONS" : [ "h", "hh", "h++", "hm", "hpp", "hxx", "in", "txx" ],
+	"INCLUDE_DIR" : "/home/mokovalevskyi/Projects/Game of fifteen/Game_of_fifteen/cmake-build-debug/Game_of_fifteen_autogen/include",
+	"MOC_COMPILATION_FILE" : "/home/mokovalevskyi/Projects/Game of fifteen/Game_of_fifteen/cmake-build-debug/Game_of_fifteen_autogen/mocs_compilation.cpp",
+	"MOC_DEFINITIONS" : 
+	[
+		"QT_CORE_LIB",
+		"QT_GUI_LIB",
+		"QT_NETWORK_LIB",
+		"QT_QMLMODELS_LIB",
+		"QT_QML_DEBUG",
+		"QT_QML_LIB",
+		"QT_QUICK_LIB"
+	],
+	"MOC_DEPEND_FILTERS" : 
+	[
+		[
+			"Q_PLUGIN_METADATA",
+			"[\n][ \t]*Q_PLUGIN_METADATA[ \t]*\\([^\\)]*FILE[ \t]*\"([^\"]+)\""
+		]
+	],
+	"MOC_INCLUDES" : 
+	[
+		"/home/mokovalevskyi/Projects/Game of fifteen/Game_of_fifteen/cmake-build-debug",
+		"/home/mokovalevskyi/Projects/Game of fifteen/Game_of_fifteen",
+		"/home/mokovalevskyi/Qt5/5.14.2/gcc_64/include",
+		"/home/mokovalevskyi/Qt5/5.14.2/gcc_64/include/QtCore",
+		"/home/mokovalevskyi/Qt5/5.14.2/gcc_64/mkspecs/linux-g++",
+		"/home/mokovalevskyi/Qt5/5.14.2/gcc_64/include/QtQuick",
+		"/home/mokovalevskyi/Qt5/5.14.2/gcc_64/include/QtQmlModels",
+		"/home/mokovalevskyi/Qt5/5.14.2/gcc_64/include/QtQml",
+		"/home/mokovalevskyi/Qt5/5.14.2/gcc_64/include/QtNetwork",
+		"/home/mokovalevskyi/Qt5/5.14.2/gcc_64/include/QtGui",
+		"/usr/include",
+		"/usr/include/c++/7",
+		"/usr/include/x86_64-linux-gnu/c++/7",
+		"/usr/include/c++/7/backward",
+		"/usr/lib/gcc/x86_64-linux-gnu/7/include",
+		"/usr/local/include",
+		"/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed",
+		"/usr/include/x86_64-linux-gnu"
+	],
+	"MOC_MACRO_NAMES" : [ "Q_OBJECT", "Q_GADGET", "Q_NAMESPACE", "Q_NAMESPACE_EXPORT" ],
+	"MOC_OPTIONS" : [],
+	"MOC_PATH_PREFIX" : true,
+	"MOC_PREDEFS_CMD" : 
+	[
+		"/usr/bin/c++",
+		"-dM",
+		"-E",
+		"-c",
+		"/snap/clion/123/bin/cmake/linux/share/cmake-3.17/Modules/CMakeCXXCompilerABI.cpp"
+	],
+	"MOC_PREDEFS_FILE" : "/home/mokovalevskyi/Projects/Game of fifteen/Game_of_fifteen/cmake-build-debug/Game_of_fifteen_autogen/moc_predefs.h",
+	"MOC_RELAXED_MODE" : false,
+	"MOC_SKIP" : [],
+	"MULTI_CONFIG" : false,
+	"PARALLEL" : 4,
+	"PARSE_CACHE_FILE" : "/home/mokovalevskyi/Projects/Game of fifteen/Game_of_fifteen/cmake-build-debug/CMakeFiles/Game_of_fifteen_autogen.dir/ParseCache.txt",
+	"QT_MOC_EXECUTABLE" : "/home/mokovalevskyi/Qt5/5.14.2/gcc_64/bin/moc",
+	"QT_UIC_EXECUTABLE" : "",
+	"QT_VERSION_MAJOR" : 5,
+	"QT_VERSION_MINOR" : 14,
+	"SETTINGS_FILE" : "/home/mokovalevskyi/Projects/Game of fifteen/Game_of_fifteen/cmake-build-debug/CMakeFiles/Game_of_fifteen_autogen.dir/AutogenUsed.txt",
+	"SOURCES" : 
+	[
+		[
+			"/home/mokovalevskyi/Projects/Game of fifteen/Game_of_fifteen/main.cpp",
+			"MU"
+		]
+	],
+	"UIC_OPTIONS" : [],
+	"UIC_SEARCH_PATHS" : [],
+	"UIC_SKIP" : [],
+	"UIC_UI_FILES" : [],
+	"VERBOSITY" : 0
+}

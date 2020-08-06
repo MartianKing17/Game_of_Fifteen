@@ -1,0 +1,4 @@
+/snap/clion/123/bin/cmake/linux/bin/cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_PREFIX_PATH=/home/mokovalevskyi/Qt5/5.14.2/gcc_64/lib/cmake -G "CodeBlocks - Unix Makefiles" "/home/mokovalevskyi/Projects/Game of fifteen/Game_of_fifteen"
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /home/mokovalevskyi/Projects/Game of fifteen/Game_of_fifteen/cmake-build-debug

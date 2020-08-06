@@ -1,0 +1,4 @@
+/home/mokovalevskyi/Projects/Game of fifteen/Game_of_fifteen/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/home/mokovalevskyi/Projects/Game of fifteen/Game_of_fifteen/cmake-build-debug/CMakeFiles/edit_cache.dir
+/home/mokovalevskyi/Projects/Game of fifteen/Game_of_fifteen/cmake-build-debug/CMakeFiles/Game_of_fifteen.dir
+/home/mokovalevskyi/Projects/Game of fifteen/Game_of_fifteen/cmake-build-debug/CMakeFiles/Game_of_fifteen_autogen.dir
