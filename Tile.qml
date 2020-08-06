@@ -13,8 +13,6 @@ Rectangle
     }
 
     property var index: 0
-    width: 480
-    height: 270
 
     FontMetrics
     {

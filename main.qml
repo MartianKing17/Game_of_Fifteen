@@ -12,13 +12,103 @@ Window
     property bool checkFixClick: false
     property int currentClickPosInArr: 0;
     property var currentCoorPos: ({})
+    property int tileHeight: height / 5
     property int tileWidth: width / 4
-    property int tileHeight: height / 4
 
     /*
-      Today to next:
+      Tommorrow to next:
       * debugging the GridView
+      * make animations
     */
+
+    function randomSort()
+    {
+        var arr = []
+        var num = 0;
+        var check = false;
+        let len = 16;
+
+        for (var i = 1; i < len; ++i)
+        {
+           num = Math.floor(Math.random() * 16)
+
+           if (num === 0)
+           {
+             --i
+             continue
+           }
+
+
+           for (let j in arr)
+           {
+               if (arr[j] === num)
+               {
+                  check = true
+                  break
+               }
+           }
+
+           if (check === true)
+           {
+              --i
+              check = false
+              continue
+           }
+
+           arr.push(num)
+        }
+
+        return arr
+    }
+
+    function enterListOfElement()
+    {
+        var j = 0
+        var tile_color = ["#FF0000", "#0000FF", "#9ACD32"];
+        var value =
+        {
+            color: "red",
+            index: ""
+        };
+
+        dataModel.clear()
+
+        var sum = 0
+        var k = 1
+
+        var arr = randomSort()
+
+        for (var c = 1; c < arr.lenght; ++c)
+        {
+            if (arr[c - 1] > arr[c])
+            {
+               k = 0
+            }
+
+            sum += k
+            ++k
+        }
+
+        for (let k in arr)
+        {
+           if (j > 3)
+           {
+               j = 0
+           }
+
+           value.color = Number(tile_color[j]).toString()
+           value.index = Number(arr[k]).toString()
+           dataModel.append(value)
+        }
+
+        value.color = "white"
+        value.index = ""
+        dataModel.append(value)
+
+        sum += 16
+        console.log(sum)
+        console.log(sum % 2)
+    }
 
     ListModel
     {
@@ -26,65 +116,23 @@ Window
 
         Component.onCompleted:
         {
-            let len = 15
-            var value
-
-            var tile_color = ["#FF0000", "#0000FF", "#9ACD32"]
-
-            value =
-            {
-                color: "red",
-                index: ""
-            }
-
-            var i = 1, j = 0
-
-            for (var k = 0; k < len; ++k)
-            {
-                if (j > 3)
-                {
-                    j = 0
-                }
-
-               value.color = Number(tile_color[j]).toString()
-
-              if (i === 14)
-              {
-                 i = 15
-              }
-              else if (i === 16)
-              {
-                i = 14
-              }
-
-               value.index = Number(i).toString()
-               append(value)
-
-               ++i
-               ++j
-            }
-
-            value.color = "white"
-            value.index = ""
-            append(value)
+            enterListOfElement()
         }
-
     }
 
     function func(pos)
     {
       var data = dataModel
-      var viewer = view
 
       if (checkFixClick === false)
       {
-         currentCoorPos = dataModel[pos].f()
+         currentCoorPos = data[pos].f()
          currentClickPosInArr = pos
          checkFixClick = true
          return
       }
 
-      var coordinateSecondTile = viewer.itemAtIndex(pos).f() // getting coordinate second tile which clicked next
+      var coordinateSecondTile = view.itemAtIndex(pos).f() // getting coordinate second tile which clicked next
       var checkToGoUp = ((currentCoorPos.y + tileHeight) === coordinateSecondTile.y) // checking the ability to go up
       var checkToGoDown = ((coordinateSecondTile.y + tileHeight) === currentCoorPos.y) // checking the ability to go down
       var checkToGoLeft = ((currentCoorPos.x + tileWidth) === coordinateSecondTile.x) // checking the ability to go left
@@ -93,11 +141,11 @@ Window
 
       if (checkToGoUp || checkToGoDown || checkToGoLeft || checkToGoRight)
       {
-          if (dataModel[pos].index === "")
+          if (data[pos].index === "")
           {
-            var temp = dataModel[pos]
-            dataModel[pos] = dataModel[currentClickPosInArr]
-            dataModel[currentClickPosInArr] = temp
+            var temp = data[pos]
+            data[pos] = data[currentClickPosInArr]
+            data[currentClickPosInArr] = temp
           }
           else
           {
@@ -114,11 +162,38 @@ Window
       }
    }
 
-
-   GridView
-   {
-       id: view
+    OverGameMenu
+    {
+       id:menu
+       visible: false
        anchors.fill: parent
+    }
+
+    function checkingGameOver()
+    {
+       let len = 16
+       var data = dataModel
+
+       for (var i = 0; i < len; ++i)
+       {
+          if (data[i] !== i+1)
+          {
+             return false
+          }
+       }
+
+       return true
+    }
+
+
+     GridView
+     {
+       id: view
+       anchors.left: parent.left
+       anchors.right: parent.right
+       anchors.top: parent.top
+       width: parent.width
+       height: tileHeight * 4
        model: dataModel
        cellHeight: tileHeight
        cellWidth: tileWidth
@@ -135,8 +210,29 @@ Window
            MouseArea
            {
                anchors.fill: parent
-               onClicked: func(view.currentIndex)
+               onClicked:
+               {
+                   func(view.currentIndex)
+
+                   if(checkingGameOver() === true)
+                   {
+                       menu.setDefWin(view)
+                       view.visible = false
+                       menu.visible = true
+                   }
+               }
            }
-      }
+        }
+    }
+
+
+  Button
+  {
+    id: mix
+    text: "Mix"
+    width: parent.width
+    height: parent.height - tileHeight * 4
+    anchors.top: view.bottom
+    onClicked: enterListOfElement()
   }
 }
