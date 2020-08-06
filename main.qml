@@ -9,12 +9,15 @@ Window
     width: 640
     height: 480
     title: qsTr("Game of fifteen")
+    property bool checkFixClick: false
+    property int currentClickPosInArr: 0;
+    property var currentCoorPos: ({})
+    property int tileWidth: width / 4
+    property int tileHeight: height / 4
 
     /*
-      Tomorrow to next:
-      * "waiting click" if (click) then rewrite array in func(pos)
+      Today to next:
       * debugging the GridView
-      * centering text pos
     */
 
     ListModel
@@ -68,228 +71,72 @@ Window
 
     }
 
-
     function func(pos)
     {
-       console.log(pos)
+      var data = dataModel
+      var viewer = view
 
-       var data = dataModel
-       var viewer = view
+      if (checkFixClick === false)
+      {
+         currentCoorPos = dataModel[pos].f()
+         currentClickPosInArr = pos
+         checkFixClick = true
+         return
+      }
+
+      var coordinateSecondTile = viewer.itemAtIndex(pos).f() // getting coordinate second tile which clicked next
+      var checkToGoUp = ((currentCoorPos.y + tileHeight) === coordinateSecondTile.y) // checking the ability to go up
+      var checkToGoDown = ((coordinateSecondTile.y + tileHeight) === currentCoorPos.y) // checking the ability to go down
+      var checkToGoLeft = ((currentCoorPos.x + tileWidth) === coordinateSecondTile.x) // checking the ability to go left
+      var checkToGoRight = ((coordinateSecondTile.x + tileWidth) === currentCoorPos.x) // checking the ability to go right
 
 
-       // search free cell +
-       // if (!available free cell in a area) +
-       //  do nothing +
-       // else
-       // "waiting click" if (click) then rewrite array
+      if (checkToGoUp || checkToGoDown || checkToGoLeft || checkToGoRight)
+      {
+          if (dataModel[pos].index === "")
+          {
+            var temp = dataModel[pos]
+            dataModel[pos] = dataModel[currentClickPosInArr]
+            dataModel[currentClickPosInArr] = temp
+          }
+          else
+          {
+            checkFixClick = false
+            currentClickPosInArr = 0
+            currentCoorPos = {}
+            return
+          }
+      }
+      else
+      {
+        checkFixClick = false
+        return
+      }
+   }
 
-       /*
-       if (pos % 4 === 0) // for 4, 8, 12, 16
+
+   GridView
+   {
+       id: view
+       anchors.fill: parent
+       model: dataModel
+       cellHeight: tileHeight
+       cellWidth: tileWidth
+
+       delegate: Tile
        {
-            if (pos === 4)
-            {
-                if (data[3].index === "")
-                {
-                   if (viewer.itemAtIndex(3).clickArea.clicked)
-                   {
-                      console.log("Clicked 3")
-                   }
-                }
-                else if (data[8].index === "")
-                {
+           color: model.color
+           width: parent.cellWidth
+           height: parent.cellHeight
+           index: model.index
+           border.color: "black"
+           border.width: 3
 
-                }
-                else
-                {
-                    return
-                }
-            }
-            else if (pos === 16)
-            {
-                if (data[12].index === "")
-                {
-
-                }
-                else if (data[15].index === "")
-                {
-
-                }
-
-                else
-                {
-                    return
-                }
-            }
-            else
-            {
-               if (data[pos - 4].index === "")
-               {
-
-               }
-               else if (data[pos - 1].index === "")
-               {
-
-               }
-               else if (data[pos + 4].index === "")
-               {
-
-               }
-               else
-               {
-                   return
-               }
-            }
-       }
-
-       else if (pos % 4 === 1 && pos !== 15)// for 1, 5, 9, 13
-       {
-            if (pos === 1)
-            {
-                if (data[2].index === "")
-                {
-
-                }
-                else if (data[5].index === "")
-                {
-
-                }
-                else
-                {
-                    return
-                }
-            }
-            else if (pos === 13)
-            {
-                if (data[9].index === "")
-                {
-
-                }
-                else if (data[14].index === "")
-                {
-
-                }
-                else
-                {
-                    return
-                }
-            }
-            else
-            {
-               if (data[pos - 4].index === "")
-               {
-
-               }
-               else if (data[pos - 1].index === "")
-               {
-
-               }
-               else if (data[pos + 4].index === "")
-               {
-
-               }
-               else
-               {
-                   return
-               }
-            }
-       }
-       else if (pos > 1 && pos < 4) // for 2, 3
-       {
-            if (data[pos - 1].index === "")
-            {
-
-            }
-            else if (data[pos + 1].index === "")
-            {
-
-            }
-            else if (data[pos + 4].index === "")
-            {
-
-            }
-            else
-            {
-                return
-            }
-       }
-       else if (pos > 13 && pos < 16) // for 14, 15
-       {
-            if (data[pos - 1].index === "")
-            {
-
-            }
-            else if (data[pos + 1].index === "")
-            {
-
-            }
-            else if (data[pos - 4].index === "")
-            {
-
-            }
-            else
-            {
-                return
-            }
-       }
-       else // for other's
-       {
-            if (data[pos - 4].index === "")
-            {
-
-            }
-            else  if (data[pos + 4].index === "")
-            {
-
-            }
-            else  if (data[pos - 1].index === "")
-            {
-
-            }
-            else  if (data[pos + 1].index === "")
-            {
-
-            }
-            else
-            {
-                return
-            }
-       }
-       */
-
-    }
-
-    /*
-    GridView
-    {
-        id: view
-        anchors.fill: parent
-        model: dataModel
-        cellHeight: parent.height / 4
-        cellWidth:  parent.width / 4
-
-        delegate: Tile
-        {
-            color: model.color
-            width: parent.cellWidth
-            height: parent.cellHeight
-            index: model.index
-            border.color: "black"
-            border.width: 3
-        }
-    }
-    */
-
-
-
-
-    Tile
+           MouseArea
            {
-               color: "red"
-               width: parent.width / 4
-               height: parent.height / 4
-               index: 1
-               border.color: "black"
-               border.width: 3
+               anchors.fill: parent
+               onClicked: func(view.currentIndex)
            }
-
+      }
+  }
 }
