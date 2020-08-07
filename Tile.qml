@@ -3,16 +3,7 @@ import QtQuick.Controls 1.2
 
 Rectangle
 {
-
-    function f ()
-    {
-      var value = {}
-      value.x = x
-      value.y = y
-      return value
-    }
-
-    property var index: 0
+    property var number: 0
 
     FontMetrics
     {
@@ -26,7 +17,7 @@ Rectangle
       y: (parent.height * 20) / 100
       width: fontPixelSize
       height: fontPixelSize
-      text: index
+      text: number
       font.pixelSize: fontPixelSize
    }
 }

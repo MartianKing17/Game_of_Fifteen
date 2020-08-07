@@ -38,6 +38,7 @@ Rectangle
               enterListOfElement()
               gameOverMenu.visible = false
               window.visible = true
+              mix.visible = true
            }
         }
 
