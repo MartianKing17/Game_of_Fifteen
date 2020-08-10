@@ -9,17 +9,59 @@ Window
     width: 640
     height: 480
     title: qsTr("Game of fifteen")
-    property bool checkFixClick: false
-    property int currentClickPosInArr: 0;
-    property var currentCoorPos: ({x, y})
     property int tileHeight: height / 5
     property int tileWidth: width / 4
+    property int emptyIndex: 0
+    property int moveToX: 0
+    property int moveToY: 0
 
 
-      // To do to next week:
+      // Today to next:
       // * make animations
-      // * debugging mix bug
 
+    function indexing(index)
+       {
+          var x = 0, y = 0
+
+          if (index <= 3)
+          {
+             x = index
+             y = 0
+          }
+          else if (index > 3 && index <= 7)
+          {
+             x = index - 4
+             y = 1
+          }
+          else if (index > 7 && index <= 11)
+          {
+              x = index - 8
+              y = 2
+          }
+          else if (index > 11 && index <= 15)
+          {
+              x = index - 12
+              y = 3
+          }
+
+          return {x, y}
+       }
+
+    function checkIndex(firstIndex, secondIndex)
+    {
+       if ((firstIndex - 1 === secondIndex) || (secondIndex - 1 === firstIndex))
+       {
+          return true
+       }
+       else if ((firstIndex - 4 === secondIndex) || (secondIndex - 4 === firstIndex))
+       {
+          return true
+       }
+       else
+       {
+          return false
+       }
+    }
 
     function enterListOfElement()
     {
@@ -117,8 +159,11 @@ Window
 
            if (arr[k] === 0)
            {
-               value.color = "white"
-               value.number = ""
+               emptyIndex = k
+               var pos = indexing(k)
+               moveToX = pos.x
+               moveToY = pos.y
+               value = {}
                dataModel.append(value)
                continue
            }
@@ -140,105 +185,37 @@ Window
         }
     }
 
-    function func(item, index, width, height)
+
+    function move(index)
     {
+        var data = dataModel
 
-      function indexing(index)
-      {
-         var x = 0, y = 0
+        if (checkIndex(index, emptyIndex) === true)
+        {
+            var value = data.get(index)
+            var swap = {color: "", number: ""}
+            var val1 = {color: "", number: ""}
+            swap.color = value.color
+            swap.number = value.number
 
-         if (index <= 3)
-         {
-            x = index
-            y = 0
-         }
-         else if (index > 3 && index <= 7)
-         {
-            x = index - 4
-            y = 1
-         }
-         else if (index > 7 && index <= 11)
-         {
-             x = index - 8
-             y = 2
-         }
-         else if (index > 11 && index <= 15)
-         {
-             x = index - 12
-             y = 3
-         }
-
-         return {x, y}
-      }
-
-      var data = dataModel
-
-      // Maybe bug here
-
-      if (checkFixClick === false)
-      {
-         if (item.number === "")
-         {
-           return
-         }
-         var coordinateFirstTile = {x, y}
-         coordinateFirstTile = indexing(index)
-         currentCoorPos.x = coordinateFirstTile.x * width
-         currentCoorPos.y = coordinateFirstTile.y * height
-         currentClickPosInArr = index
-         checkFixClick = true
-         return
-      }
-
-      if (currentClickPosInArr === index && item.number !== "")
-      {
-         return
-      }
-
-      var coordinateSecondTile =  {x, y} // getting coordinate second tile which clicked next
-      coordinateSecondTile = indexing(index)
-      coordinateSecondTile.x = coordinateSecondTile.x * width
-      coordinateSecondTile.y = coordinateSecondTile.y * height
-
-      var checkToGoUp = ((coordinateSecondTile.y + tileHeight) === currentCoorPos.y) // checking the ability to go up
-      var checkToGoDown = ((currentCoorPos.y + tileHeight) === coordinateSecondTile.y) // checking the ability to go down
-      var checkToGoLeft = ((coordinateSecondTile.x + tileWidth) === currentCoorPos.x) // checking the ability to go left
-      var checkToGoRight = ((currentCoorPos.x + tileWidth) === coordinateSecondTile.x) // checking the ability to go right
-
-      if (checkToGoUp || checkToGoDown || checkToGoLeft || checkToGoRight)
-      {
-          if (item.number === "")
-          {
-            var swap =
+            for (var i = 0; i < data.count; ++i)
             {
-              color : "",
-              number : ""
-            };
+                if (i === emptyIndex)
+                {
+                   data.set(emptyIndex, swap)
+                }
 
-            var temp = data.get(index)
-            swap.color = temp.color
-            swap.number = temp.number
-            data.set(index , data.get(currentClickPosInArr))
-            data.set(currentClickPosInArr, swap)
-            checkFixClick = false
-            currentClickPosInArr = 0
-            currentCoorPos = {}
-          }
-          else
-          {
-            checkFixClick = false
-            currentClickPosInArr = 0
-            currentCoorPos = {}
-            return
-          }
-      }
-      else
-      {
-        checkFixClick = false
-        return
-      }
+                if (i === index)
+                {
+                   val1.color = "white"
+                   val1.number = ""
+                   data.set(index, val1)
+                }
+            }
 
-   }
+            emptyIndex = index
+        }
+    }
 
     OverGameMenu
     {
@@ -263,39 +240,6 @@ Window
        return true
     }
 
-    function test()
-    {
-       var data = dataModel
-
-       var value =
-       {
-          color : "red",
-          number : ""
-       }
-
-       data.clear()
-
-       var arr = []
-
-       let len = 16
-
-       for (var i = 1; i < len; ++i)
-       {
-          arr.push(i)
-       }
-
-       for (let i in arr)
-       {
-          value.number = Number(arr[i]).toString()
-          data.append(value)
-       }
-
-       value.color = "white"
-       value.number = ""
-       data.append(value)
-    }
-
-
      GridView
      {
        id: view
@@ -310,37 +254,47 @@ Window
        interactive: false
 
        delegate: Tile
-       {
-           id: tile
-           color: model.color
-           width: view.cellWidth
-           height: view.cellHeight
-           number: model.number
-           border.color: "black"
-           border.width: 1
-
-           MouseArea
            {
-               anchors.fill: parent
-               onClicked:
-               {
-                   func(view.children[0].children[index], index, view.cellWidth, view.cellHeight)
+               id: tile
+               color: model.color
+               width: view.cellWidth
+               height: view.cellHeight
+               number: model.number
+               border.color: "black"
+               border.width: 1
 
-                   if(checkingGameOver() === true)
+               Behavior on x
+               {
+                 SpringAnimation {to: moveX; spring: 2; damping: 0.3}
+               }
+
+               Behavior on y
+               {
+                 SpringAnimation {to: moveY; spring: 2; damping: 0.3}
+               }
+
+
+               MouseArea
+               {
+                   anchors.fill: parent
+                   onClicked:
                    {
-                       menu.setDefWin(view)
-                       view.visible = false
-                       menu.visible = true
-                       mix.visible = false
+                       move(index)
+
+                       if(checkingGameOver() === true)
+                       {
+                           menu.setDefWin(view)
+                           view.visible = false
+                           menu.visible = true
+                           mix.visible = false
+                       }
                    }
                }
            }
-        }
 
-      PropertyAnimation
-      {
-         id: animation
-      }
+       move: Transition {
+           NumberAnimation { properties: "x,y"; duration: 1000; easing.type: Easing.OutBounce }
+       }
      }
 
 
