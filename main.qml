@@ -190,8 +190,20 @@ Window
     {
         var data = dataModel
 
+        function abs(number)
+        {
+           if (number < 0)
+           {
+              return number * -1;
+           }
+
+           return number;
+        }
+
         if (checkIndex(index, emptyIndex) === true)
         {
+            //data.move(index, emptyIndex, 1) // Animation works, but elements have don't correct position
+
             var value = data.get(index)
             var swap = {color: "", number: ""}
             var val1 = {color: "", number: ""}
@@ -212,6 +224,7 @@ Window
                    data.set(index, val1)
                 }
             }
+
 
             emptyIndex = index
         }
@@ -253,44 +266,48 @@ Window
        cellWidth: tileWidth
        interactive: false
 
-       delegate: Tile
-           {
-               id: tile
-               color: model.color
-               width: view.cellWidth
-               height: view.cellHeight
-               number: model.number
-               border.color: "black"
-               border.width: 1
 
-               Behavior on x
-               {
-                 SpringAnimation {to: moveX; spring: 2; damping: 0.3}
+       delegate: Item
+       {
+           width: view.cellWidth
+           height: view.cellHeight
+       Tile
+       {
+           id: tile
+           color: model.color
+           width: view.cellWidth
+           height: view.cellHeight
+           number: model.number
+           border.color: "black"
+           border.width: 1
+           visible: if(model.number === "")
+                    {
+                       return false;
+                    }
+                    else
+                    {
+                      return true;
+                    }
+       }
+
+          MouseArea
+          {
+              anchors.fill: parent
+              onClicked:
+              {
+                 move(index)
+
+                 if(checkingGameOver() === true)
+                 {
+                    menu.setDefWin(view)
+                    view.visible = false
+                    menu.visible = true
+                    mix.visible = false
+                  }
                }
+          }
 
-               Behavior on y
-               {
-                 SpringAnimation {to: moveY; spring: 2; damping: 0.3}
-               }
-
-
-               MouseArea
-               {
-                   anchors.fill: parent
-                   onClicked:
-                   {
-                       move(index)
-
-                       if(checkingGameOver() === true)
-                       {
-                           menu.setDefWin(view)
-                           view.visible = false
-                           menu.visible = true
-                           mix.visible = false
-                       }
-                   }
-               }
-           }
+      }
 
        move: Transition {
            NumberAnimation { properties: "x,y"; duration: 1000; easing.type: Easing.OutBounce }
