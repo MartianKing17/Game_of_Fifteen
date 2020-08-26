@@ -1,4 +1,4 @@
-import QtQuick 2.9
+import QtQuick 2.12
 import QtQuick.Controls 1.2
 
 Rectangle {
@@ -10,7 +10,7 @@ Rectangle {
     }
 
     Text {
-        property var fontPixelSize: 0.075 * parent.width  + 0.4 * parent.height
+        readonly property real fontPixelSize: 0.075 * parent.width  + 0.4 * parent.height
         anchors.centerIn: parent
         width: fontPixelSize
         height: fontPixelSize

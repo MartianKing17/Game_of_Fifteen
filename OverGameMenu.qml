@@ -1,4 +1,4 @@
-import QtQuick 2.0
+import QtQuick 2.12
 import QtQuick.Controls 1.2
 
 Rectangle {
@@ -10,38 +10,45 @@ Rectangle {
     }
 
     Text {
-        id: text
-        text: qsTr("Would you like game again?")
-        width: (parent.width * 80) / 100
-        height: (parent.height * 80) / 100
+        id: _text
+        text: "Would you like game again?"
+        width: parent.width * 0.8
+        height: parent.height * 0.8
     }
 
     Rectangle {
-        height: (parent.height * 20) / 100
+        height: gameOverMenu.height - _text.height
         width: parent.width
-        anchors.top: text.bottom
-        anchors.topMargin: 5
+        anchors.top: _text.bottom
+        anchors.topMargin: height / 20
 
         Button {
+            id: restart
             text: "Restart"
             height: parent.height
-            width: parent.width / 2
+            width: parent.width / 2.2
             anchors.left: parent.left
+            anchors.leftMargin: parent.width / 35
             onClicked: {
-                enterListOfElement();
                 gameOverMenu.visible = false;
                 window.visible = true;
-                mix.visible = true;
             }
         }
 
         Button {
             text: "Exit"
             height: parent.height
-            width: parent.width / 2
+            width: parent.width / 2.2
             anchors.left: restart.right
-            anchors.leftMargin: 5
+            anchors.leftMargin: parent.width / 40
             onClicked: Qt.quit()
+        }
+
+
+        Component.onCompleted:
+        {
+            restart.clicked.connect(mainWindow.signalEnteringElement)
+            restart.clicked.connect(mainWindow.mixVisibility)
         }
     }
 }

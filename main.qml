@@ -1,4 +1,4 @@
-import QtQuick 2.9
+import QtQuick 2.12
 import QtQuick.Window 2.2
 import QtQuick.Controls 1.5
 
@@ -8,26 +8,23 @@ Window {
     width: 640
     height: 480
     title: qsTr("Game of fifteen")
-    property int tileHeight: height / 5
-    property int tileWidth: width / 4
+    readonly property int tileHeight: height / 5
+    readonly property int tileWidth: width / 4
     property int emptyIndex: 0
 
-    function abs(number) {
-        if (number < 0) {
-            return number * -1;
-        }
-
-        return number;
-    }
+    signal signalEnteringElement;
+    signal mixVisibility;
+    onSignalEnteringElement: enterListOfElement()
+    onMixVisibility: _mix.visible = true
 
     function checkIndex(firstIndex, secondIndex) {
-        return (abs(firstIndex - secondIndex) === 1) || (abs(firstIndex - secondIndex) === 4)
+        return (Math.abs(firstIndex - secondIndex) === 1) || (Math.abs(firstIndex - secondIndex) === 4)
     }
 
     function enterListOfElement() {
         var tileColor = ["#FF0000", "#00BFFF", "#9ACD32"];
         var value = {
-            color: "red",
+            color: "#FF0000",
             number: ""
         };
 
@@ -131,23 +128,23 @@ Window {
         var data = dataModel;
 
         function swap(firstIndex, secondIndex) {
-            var temp = data.get(firstIndex);
+            var swapValue = data.get(firstIndex);
             var a = {color: "", number: ""};
             var b = {color: "", number: ""};
 
-            a.color = temp.color;
-            a.number = temp.number;
+            a.color = swapValue.color;
+            a.number = swapValue.number;
 
-            temp = data.get(secondIndex);
+            swapValue = data.get(secondIndex);
 
-            b.color =  temp.color;
-            b.number = temp.number;
+            b.color =  swapValue.color;
+            b.number = swapValue.number;
 
             data.set(firstIndex, b);
             data.set(secondIndex, a);
         }
 
-        function someFunc(index) {
+        function checkCorrectMovingIndex(index) {
 
             if (index >= 0 && index < 4) {
                 return 0;
@@ -155,19 +152,19 @@ Window {
                 return 1;
             } else if (index >= 8 && index < 12) {
                 return 2;
-            } else if (index > 12) {
+            } else if (index >= 12) {
                 return 3;
             }
         }
 
         if (checkIndex(index, emptyIndex) === true) {
-            if (abs(emptyIndex - index) === 1 && (someFunc(index) !== someFunc(emptyIndex))) {
+            if (Math.abs(emptyIndex - index) === 1 && (checkCorrectMovingIndex(index) !== checkCorrectMovingIndex(emptyIndex))) {
                 return;
             }
 
             data.move(index, emptyIndex, 1);
 
-            if (abs(emptyIndex - index) === 4) {
+            if (Math.abs(emptyIndex - index) === 4) {
                 var i = index > emptyIndex ? ++emptyIndex : --emptyIndex;
                 var add = index > emptyIndex ? 1 : -1;
                 var len = index;
@@ -183,7 +180,7 @@ Window {
     }
 
     OverGameMenu {
-        id:menu
+        id: menu
         visible: false
         anchors.fill: parent
     }
@@ -193,7 +190,7 @@ Window {
         var data = dataModel;
 
         for (var i = 0; i < len; ++i) {
-            if (Number(data.get(i).number) !== i+1) {
+            if (Number(data.get(i).number) !== (i + 1)) {
                 return false;
             }
         }
@@ -220,9 +217,9 @@ Window {
             width: view.cellWidth
             height: view.cellHeight
             Tile {
+                id: tile
+                anchors.fill: parent
                 color: model.color
-                width: view.cellWidth
-                height: view.cellHeight
                 number: model.number
                 border.color: "black"
                 border.width: 1
@@ -238,7 +235,7 @@ Window {
                         menu.setDefWin(view);
                         view.visible = false;
                         menu.visible = true;
-                        mix.visible = false;
+                        _mix.visible = false;
                     }
                 }
             }
@@ -247,7 +244,7 @@ Window {
 
 
     Button {
-        id: mix
+        id: _mix
         text: "Mix"
         width: parent.width
         height: parent.height - tileHeight * 4
